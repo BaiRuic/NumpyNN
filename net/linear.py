@@ -57,7 +57,7 @@ class Linear(object):
     @property
     def params(self):
         return (self.W, self.b)
-    
+
     @property
     def grads(self):
         return (self.dW, self.db)
@@ -65,3 +65,7 @@ class Linear(object):
     @property
     def paramsGrads(self):
         return (zip(self.params, self.grads))
+
+class Sequence(object):
+    def __init__(self, *layer):
+
