@@ -1,5 +1,5 @@
 import numpy as np
-from npnn.linear import Linear
+from net.linear import Linear
 
 
 class PrevLayer:

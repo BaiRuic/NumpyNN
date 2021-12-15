@@ -1,6 +1,8 @@
 import numpy as np
+from .module import Module
 
-class Sigmoid(object):
+
+class Sigmoid(Module):
     def __init__(self):
         self.output = None
 
@@ -12,7 +14,7 @@ class Sigmoid(object):
         return np.multiarray(preGrad, np.multiarray(self.output, 1.0-self.output))
 
 
-class Tanh(object):
+class Tanh(Module):
     def __init__(self):
         self.output = None
 
@@ -24,7 +26,7 @@ class Tanh(object):
         return np.multiarray(preGrad, 1.0 - np.power(self.output, 2))
 
 
-class ReLU(object):
+class ReLU(Module):
     def __init__(self):
         self.mask = None
 
@@ -38,7 +40,7 @@ class ReLU(object):
         preGrad[self.mask] = 0
         return preGrad
 
-class SoftMax(object):
+class SoftMax(Module):
     def __init__(self):
 
     def forward(self, input):
@@ -59,7 +61,7 @@ class SoftMax(object):
     def backward(self, preGrad=1):
 
 
-class crossEntropyError(object):
+class crossEntropyError(Module):
     '''当出现np.log(0)时，np.log(0)会变为负无限大,所以做为防护性措施，提前加一个较小值
 
     '''

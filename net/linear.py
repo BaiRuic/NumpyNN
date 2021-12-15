@@ -1,7 +1,8 @@
 import numpy as np
-from numpy.lib.type_check import _nan_to_num_dispatcher
+from .module import Module
 
-class Linear(object):
+
+class Linear(Module):
     '''Full connected layer
 
     Parameters
@@ -12,6 +13,8 @@ class Linear(object):
         the size of current layer needed feed
     '''
     def __init__(self, n_in, n_out):
+        super(Linear, self).__init__()
+
         self.n_in = n_in
         self.n_out = n_out
 
@@ -20,52 +23,38 @@ class Linear(object):
 
         self.dW = None
         self.db = None
-        self.curInput = None
 
-        self.firstLayer = False
+        self._input = None
+        self._output = None
 
-        self._initParams(self.n_in, self.n_out)
+        self._init_params(self.n_in, self.n_out)
 
     
-    def _initParams(self, n_in, n_out):
+    def _init_params(self, n_in, n_out):
         '''初始化参数为 正态分布，均值0 方差 np.sqrt(2 / (fan_out + fan_in))
         '''
         mean = 0.0
         std = np.sqrt(2 / (n_in + n_out))
         self.W = np.random.normal(mean, std, (n_in, n_out))
-        self.b = np.zeros((n_out))
+        self.b = np.zeros(n_out)
 
-    def connectPrevLayer(self, prevLayer=None):
-        if prevLayer is None:
-            n_in = self.n_in
-        else:
-            n_in = prevLayer.outShape[-1]
-        
-        n_out = self.n_out
-        self._initParams(n_in, n_out)
 
-    def forward(self, input, *args, **kwargs):
-        self.curInput = input
-        return np.dot(input, self.W) + self.b
+    def forward(self, input_, *args, **kwargs):
+        self._input = input_
+        self._output = np.dot(input_, self.W) + self.b
+        return self._output
 
-    def backward(self, preGrad, *args, **kwargs):
-        self.dW = np.dot(self.curInput.T, preGrad)
-        self.db = np.mean(preGrad, axis=0)
-        if self.firstLayer is False:
-            return np.dot(preGrad, self.W.T)
+    def backward(self, pre_grad, *args, **kwargs):
+        self.dW = np.dot(self._input.T, pre_grad)
+        self.db = np.mean(pre_grad, axis=0)
+
+        return np.dot(pre_grad, self.W.T)
 
     @property
     def params(self):
-        return (self.W, self.b)
+        return [self.W, self.b]
 
     @property
     def grads(self):
-        return (self.dW, self.db)
-
-    @property
-    def paramsGrads(self):
-        return (zip(self.params, self.grads))
-
-class Sequence(object):
-    def __init__(self, *layer):
+        return [self.dW, self.db]
 
