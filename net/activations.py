@@ -4,61 +4,71 @@ from .module import Module
 
 class Sigmoid(Module):
     def __init__(self):
+        super(Sigmoid, self).__init__()
         self.output = None
 
-    def forward(self, input, *args, **kwargs):
-        self.output = 1.0 / (1 + np.exp(-input))
+    def forward(self, input_):
+        self.output = 1.0 / (1 + np.exp(-input_))
         return self.output
 
-    def backward(self, preGrad):
-        return np.multiarray(preGrad, np.multiarray(self.output, 1.0-self.output))
+    def backward(self, pre_grad):
+        return np.multiply(pre_grad, np.multiply(self.output, 1.0-self.output))
 
 
 class Tanh(Module):
     def __init__(self):
+        super(Tanh, self).__init__()
         self.output = None
 
-    def forward(self, input):
-        self.output = np.tanh(input)
+    def forward(self, input_):
+        self.output = np.tanh(input_)
         return self.output
 
-    def backward(self, preGrad):
-        return np.multiarray(preGrad, 1.0 - np.power(self.output, 2))
+    def backward(self, pre_grad):
+        return np.multiply(pre_grad, 1.0 - np.power(self.output, 2))
 
 
 class ReLU(Module):
     def __init__(self):
+        super(ReLU, self).__init__()
         self.mask = None
 
-    def forward(self, input):
-        self.mask = (input <= 0)
-        output = input.copy()
+    def forward(self, input_):
+        self.mask = input_ <= 0
+        output = input_.copy()
         output[self.mask] = 0
         return output
 
-    def backward(self, preGrad=None):
-        preGrad[self.mask] = 0
-        return preGrad
+    def backward(self, pre_grad=None):
+        # temp = np.ones_like(pre_grad)
+        # temp[self.mask] = 0
+        # return np.multiply(pre_grad, temp)
+        pre_grad[self.mask] = 0
+        return pre_grad
+
 
 class SoftMax(Module):
     def __init__(self):
+        super(SoftMax, self).__init__()
+        pass
 
-    def forward(self, input):
+    def forward(self, input_):
         '''计算输出的softmax，防止溢出，在计算前，减去了每一个样本的最大输出值
         Parameters
         ----------
-        input:[np.array]
+        input_:[np.array]
 
         Returns np.array
         -------
         '''
-        max_val = np.max(input, axis=0)
-        exp = np.exp(input-max_val)
-        sum_exp = np.sum(exp, axis=0)
+        max_val = np.max(input_, axis=1)
+        exp = np.exp(input_ - max_val)
+        sum_exp = np.sum(exp, axis=1)
         res = exp / sum_exp
         return res
 
     def backward(self, preGrad=1):
+        pass
 
 
 class crossEntropyError(Module):
@@ -66,6 +76,7 @@ class crossEntropyError(Module):
 
     '''
     def __init__(self, delta=1e-7):
+        super(crossEntropyError, self).__init__()
         self.delta = delta
 
     def forward(self, pred, target):
@@ -95,7 +106,11 @@ class crossEntropyError(Module):
             pred = [np.range(batch_size), target]
             res = - np.sum(np.log(pred + self.delta)) / batch_size
 
-    def backward(self, preGrad=1):
+        return res
+
+    def backward(self, pre_grad=1):
+        pass
+
 
 
 

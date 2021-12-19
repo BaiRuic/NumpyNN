@@ -1,19 +1,17 @@
-import numpy as np
-
 class Module(object):
-    '''
+    """
     为所有网络的基类
-    '''
+    """
     def __init__(self):
         pass
 
-    def __call__(self, input_, *args, **kwargs):
-        return self.forward(input_, *args, **kwargs)
+    def __call__(self, input_):
+        return self.forward(input_)
 
-    def forward(self, input_, *args, **kwargs):
+    def forward(self, input_):
         raise NotImplementedError
 
-    def backward(self, pre_grad, *args, **kwargs):
+    def backward(self, pre_grad):
         '''
         计算当前网络参数的梯度信息，并向前一层返回
         Parameters
