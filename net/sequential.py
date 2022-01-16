@@ -1,4 +1,4 @@
-from .module import Module
+from net.module import Module
 
 
 class Sequential(Module):

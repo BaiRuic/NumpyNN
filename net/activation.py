@@ -1,5 +1,5 @@
 import numpy as np
-from .module import Module
+from net.module import Module
 
 
 class Sigmoid(Module):
