@@ -70,3 +70,16 @@ class SoftMax(Module):
     def backward(self, pre_grad=1):
         dout = np.diag(self.res) - np.outer(self.res, self.res)
         return np.dot(dout, pre_grad)
+
+
+    class SoftPlus(Module):
+        def __init__(self):
+            self.input_ = None
+
+        def forward(self, input_):
+            self.input_ =  input_
+            return np.log(1 + np.exp(input_))
+
+        def backward(self, pre_grad):
+            return np.multiply(pre_grad, np.exp(self.input_) / (1+np.exp(self.input_)))
+
