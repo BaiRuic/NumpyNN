@@ -20,4 +20,12 @@ assert y.shape == (100, 2), "加入fc3之后 输出有误"
 
 print(len(model.params))
 print(len(model.grads))
-print(len(model.params_grads))
+
+for params, grads in model.params_grads:
+    print(f"p:{params.shape}, g:{grads.shape}")
+
+for params in model.params:
+    print("p", params.shape)
+
+for grads in model.grads:
+    print("g", grads.shape)
