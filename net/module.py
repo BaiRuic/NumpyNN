@@ -33,7 +33,7 @@ class Module(object):
         -------
         当前网络的参数
         '''
-        raise NotImplementedError
+        return []
 
     @property
     def grads(self):
@@ -43,7 +43,7 @@ class Module(object):
         -------
         参数的梯度
         '''
-        raise NotImplementedError
+        return []
 
     @property
     def params_grads(self):
