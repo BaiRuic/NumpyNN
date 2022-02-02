@@ -20,14 +20,15 @@ class Linear(Module):
 
         self.W = None
         self.b = None
+        self._init_params(self.n_in, self.n_out)
 
-        self.dW = None
-        self.db = None
+        self.dW = np.zeros_like(self.W)
+        self.db = np.zeros_like(self.b)
 
         self._input = None
         self._output = None
 
-        self._init_params(self.n_in, self.n_out)
+
 
     def _init_params(self, n_in, n_out):
         """初始化参数为 正态分布，均值0 方差 np.sqrt(2 / (fan_out + fan_in))
@@ -45,7 +46,7 @@ class Linear(Module):
     def backward(self, pre_grad):
         self.dW = np.dot(self._input.T, pre_grad)
         self.db = np.mean(pre_grad, axis=0)
-
+        
         return np.dot(pre_grad, self.W.T)
 
     @property
