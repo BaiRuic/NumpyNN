@@ -45,13 +45,3 @@ class Module(object):
         '''
         return []
 
-    @property
-    def params_grads(self):
-        '''
-        返回当前网络的参数以及对应的梯度
-        Returns
-        -------
-        当前网络对应的参数及梯度
-        '''
-        return list(zip(self.params, self.grads))
-
