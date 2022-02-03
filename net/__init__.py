@@ -1,2 +1,2 @@
 import net.module
-imprt
+import net.linear
