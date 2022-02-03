@@ -10,9 +10,9 @@ inputs = np.arange(100).reshape(100,1)
 targets = np.sin(inputs)
 
 mod = Sequential(
-    Linear(1, 8),
+    Linear(1, 20),
     Sigmoid(),
-    Linear(8, 1),
+    Linear(20, 1),
 )
 
 criterion = MSE()
